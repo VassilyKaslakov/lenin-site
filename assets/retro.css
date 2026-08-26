@@ -1,0 +1,438 @@
+/* ============================================================
+   列宁文库 · 复古档案风
+   旧报纸 / 档案馆排版 · 泛黄纸 · 红字刊头
+   ============================================================ */
+
+:root, [data-theme="sepia"] {
+  --paper: #f2e8d0;
+  --paper-deep: #e7d8b3;
+  --paper-card: #efe4c6;
+  --ink: #2e2618;
+  --muted: #6f5e40;
+  --rule: #9a1f1f;
+  --accent: #9a1f1f;
+  --link: #7a2b12;
+  --border: #c9b98f;
+  --footnote-bg: #ece0bf;
+  --shadow: rgba(60, 40, 10, 0.28);
+  --mark: #d9b84a;
+}
+[data-theme="dark"] {
+  --paper: #201b13;
+  --paper-deep: #2b2417;
+  --paper-card: #282114;
+  --ink: #e6d7b3;
+  --muted: #9a8a66;
+  --rule: #c03a3a;
+  --accent: #d05050;
+  --link: #d8a06a;
+  --border: #4c4230;
+  --footnote-bg: #241d12;
+  --shadow: rgba(0, 0, 0, 0.55);
+  --mark: #8a6d2a;
+}
+
+* { box-sizing: border-box; }
+
+html { font-size: 16px; }
+
+body {
+  margin: 0;
+  padding: 0 16px 48px;
+  font-family: "Songti SC", "SimSun", "STSong", "Noto Serif CJK SC", "AR PL UMing CN", serif;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image: radial-gradient(ellipse at 50% 0%, var(--paper) 0%, var(--paper-deep) 130%);
+  background-attachment: fixed;
+  line-height: 1.9;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .3s, color .3s;
+}
+
+/* 纸张噪点 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+  opacity: 1;
+}
+
+/* ============ 刊头 ============ */
+.masthead {
+  position: relative;
+  z-index: 1;
+  max-width: 980px;
+  margin: 18px auto 0;
+  padding: 18px 26px 14px;
+  background: var(--paper-card);
+  border-top: 4px double var(--rule);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 3px 14px var(--shadow);
+}
+.masthead-inner { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+.brand {
+  font-family: "KaiTi", "STKaiti", "Kai", "楷体", "SimSun", serif;
+  font-size: 2.1rem;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: var(--rule);
+  text-decoration: none;
+  text-shadow: 1px 1px 0 rgba(0,0,0,.06);
+}
+.brand:hover { color: var(--accent); }
+.masthead-sub {
+  font-family: "Times New Roman", Georgia, serif;
+  font-size: .72rem;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.masthead-years {
+  margin-left: auto;
+  font-family: "Times New Roman", serif;
+  font-size: .8rem;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+.topnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 22px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+.topnav a {
+  font-family: "KaiTi", "STKaiti", "Kai", "楷体", "SimSun", serif;
+  font-size: .98rem;
+  letter-spacing: 2px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.topnav a:hover { color: var(--rule); text-decoration: underline; text-decoration-style: wavy; }
+.topnav a.active { color: var(--rule); }
+
+.reader-controls {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.reader-controls button {
+  font-family: "KaiTi", "STKaiti", "Kai", "楷体", serif;
+  font-size: .9rem;
+  padding: 2px 11px;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  cursor: pointer;
+}
+.reader-controls button:hover { border-color: var(--rule); color: var(--rule); }
+.reader-controls .wc {
+  margin-left: auto;
+  font-size: .72rem;
+  color: var(--muted);
+}
+
+/* ============ 主体容器 ============ */
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 980px;
+  margin: 20px auto 0;
+  padding: 30px 38px 36px;
+  background: var(--paper-card);
+  border: 1px solid var(--border);
+  outline: 3px double var(--border);
+  outline-offset: 5px;
+  box-shadow: 0 5px 22px var(--shadow);
+}
+/* 四角装饰 */
+.page::before, .page::after {
+  content: "";
+  position: absolute;
+  width: 22px; height: 22px;
+  border-color: var(--rule);
+  border-style: solid;
+  border-width: 0;
+}
+.page::before {
+  top: 8px; left: 8px;
+  border-top-width: 2px; border-left-width: 2px;
+}
+.page::after {
+  bottom: 8px; right: 8px;
+  border-bottom-width: 2px; border-right-width: 2px;
+}
+
+.breadcrumb {
+  font-size: .82rem;
+  color: var(--muted);
+  margin: 0 0 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.breadcrumb a { color: var(--link); text-decoration: none; }
+.breadcrumb a:hover { color: var(--rule); text-decoration: underline; }
+.breadcrumb .sep { margin: 0 6px; color: var(--muted); }
+
+/* ============ 文章页 ============ */
+.article { max-width: 880px; }
+.article-head { text-align: center; margin: 8px 0 24px; }
+.article-head h1 {
+  font-family: "KaiTi", "STKaiti", "Kai", "楷体", "SimSun", serif;
+  font-size: 1.7rem;
+  line-height: 1.5;
+  margin: 0 0 10px;
+  color: var(--ink);
+  letter-spacing: 1px;
+}
+.article-head .byline {
+  font-family: "KaiTi", "STKaiti", "Kai", "楷体", serif;
+  color: var(--muted);
+  font-size: .9rem;
+  margin: 0;
+}
+.article-head .byline .date { margin-left: 10px; }
+.rule-hr {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 4px auto 22px;
+  width: 58%;
+}
+
+.article-body {
+  font-size: 1.02rem;
+  text-align: justify;
+}
+.article-body p, .article-body div {
+  margin: 0.65em 0;
+}
+.article-body br { content: ""; display: block; margin: 0.55em 0; }
+.article-body a { color: var(--link); }
+.article-body a:hover { color: var(--rule); text-decoration-style: wavy; }
+.article-body h3, .article-body h4 {
+  font-family: "KaiTi", "STKaiti", "Kai", "楷体", serif;
+  text-align: center;
+  margin: 1.4em 0 0.8em;
+  color: var(--ink);
+}
+.article-body table { margin: 1em auto; border-collapse: collapse; }
+.article-body td { padding: 2px 12px; }
+.article-body .editor-note {
+  display: block;
+  font-size: .9em;
+  color: var(--muted);
+  border-left: 3px solid var(--border);
+  padding-left: 14px;
+  margin: 1em 0;
+}
+.article-body .quote-block {
+  display: block;
+  border-left: 3px solid var(--border);
+  padding-left: 16px;
+  margin: 1em 1.5em;
+  color: var(--muted);
+}
+.article-body .page-marker {
+  display: block;
+  text-align: center;
+  font-size: .78em;
+  color: var(--muted);
+  margin: 1.2em 0;
+  letter-spacing: 2px;
+}
+.article-body .img-missing, .article-body .dead-link {
+  font-style: italic;
+  color: var(--muted);
+}
+.article-body .ext-missing {
+  color: var(--muted);
+  border-bottom: 1px dotted var(--border);
+  cursor: help;
+}
+.article-body .footnote-as-sidebar {
+  display: block;
+  font-size: .86em;
+  color: var(--muted);
+  margin: 0.6em 0;
+}
+sup.fn-ref, .article-body sup { font-size: .72em; }
+
+/* 脚注区 */
+.footnotes {
+  margin-top: 26px;
+  padding-top: 14px;
+  border-top: 2px solid var(--rule);
+  background: var(--footnote-bg);
+  padding: 12px 18px;
+  font-size: .84rem;
+  color: var(--muted);
+}
+.footnotes .fn-head {
+  font-family: "KaiTi", "STKaiti", "Kai", "楷体", serif;
+  color: var(--rule);
+  letter-spacing: 4px;
+  margin: 0 0 8px;
+}
+.footnotes a { color: var(--link); }
+.footnotes a:hover { color: var(--rule); }
+
+/* ============ 主页：时期章节 ============ */
+.period-section { margin: 26px 0; }
+.period-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 12px;
+  font-family: "KaiTi", "STKaiti", "Kai", "楷体", serif;
+  font-size: 1.25rem;
+  color: var(--rule);
+  letter-spacing: 3px;
+}
+.period-title::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--border);
+}
+.entry-list { list-style: none; margin: 0; padding: 0; }
+.entry-list li {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  padding: 4px 0;
+  border-bottom: 1px dotted var(--border);
+}
+.entry-list li::before { content: "◆"; color: var(--rule); font-size: .55rem; align-self: center; }
+.entry-list .entry-title { color: var(--link); text-decoration: none; }
+.entry-list .entry-title:hover { color: var(--rule); text-decoration: underline; text-decoration-style: wavy; }
+.entry-list .entry-date { color: var(--muted); font-size: .8rem; margin-left: auto; white-space: nowrap; }
+.entry-list li.star .entry-title::after { content: " ★"; color: var(--rule); font-size: .75em; }
+
+/* ============ 分类页 ============ */
+.catalog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+.catalog-card {
+  border: 1px solid var(--border);
+  background: var(--paper);
+  padding: 14px 18px 16px;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+.catalog-card h3 {
+  margin: 0 0 10px;
+  font-family: "KaiTi", "STKaiti", "Kai", "楷体", serif;
+  color: var(--rule);
+  letter-spacing: 2px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+}
+.catalog-card ul { list-style: none; margin: 0; padding: 0; font-size: .92rem; }
+.catalog-card li { padding: 2px 0; }
+.catalog-card a { color: var(--link); text-decoration: none; }
+.catalog-card a:hover { color: var(--rule); text-decoration: underline; }
+.catalog-card .count { float: right; color: var(--muted); font-size: .75rem; }
+
+/* ============ 搜索 ============ */
+.search-box {
+  max-width: 680px;
+  margin: 10px auto 24px;
+  display: flex;
+  gap: 10px;
+}
+.search-box input {
+  flex: 1;
+  font-family: inherit;
+  font-size: 1.02rem;
+  padding: 10px 14px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  outline: none;
+}
+.search-box input:focus { border-color: var(--rule); }
+.search-loading { text-align: center; color: var(--muted); font-family: "KaiTi", serif; letter-spacing: 2px; }
+.search-meta { text-align: center; color: var(--muted); font-size: .82rem; margin-bottom: 16px; }
+.search-results { max-width: 860px; margin: 0 auto; }
+.search-result {
+  padding: 12px 16px;
+  margin: 0 0 14px;
+  border: 1px solid var(--border);
+  background: var(--paper);
+}
+.search-result .sr-title a { font-family: "KaiTi", serif; font-size: 1.05rem; color: var(--rule); text-decoration: none; }
+.search-result .sr-title a:hover { text-decoration: underline; }
+.search-result .sr-meta { font-size: .76rem; color: var(--muted); margin-top: 2px; }
+.search-result .sr-snippet { font-size: .9rem; color: var(--ink); margin-top: 6px; }
+.search-result mark { background: var(--mark); color: inherit; padding: 0 2px; border-radius: 2px; }
+.no-result { text-align: center; color: var(--muted); padding: 40px 0; font-family: "KaiTi", serif; letter-spacing: 3px; }
+
+/* ============ 统计页 ============ */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin: 22px 0; }
+.stat-tile {
+  text-align: center;
+  border: 1px solid var(--border);
+  background: var(--paper);
+  padding: 18px 10px;
+}
+.stat-tile .stat-num { font-family: "Times New Roman", serif; font-size: 2rem; color: var(--rule); }
+.stat-tile .stat-label { font-family: "KaiTi", serif; font-size: .8rem; color: var(--muted); letter-spacing: 2px; }
+.bar-chart { margin: 10px 0 26px; }
+.bar-row { display: flex; align-items: center; gap: 12px; margin: 6px 0; }
+.bar-label { width: 120px; text-align: right; font-family: "KaiTi", serif; font-size: .86rem; color: var(--muted); }
+.bar-track { flex: 1; background: var(--border); height: 14px; border: 1px solid var(--border); position: relative; }
+.bar-fill { height: 100%; background: var(--rule); }
+.bar-num { width: 56px; font-family: "Times New Roman", serif; color: var(--muted); font-size: .8rem; }
+.classic-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-top: 14px; }
+.classic-card {
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--rule);
+  background: var(--paper);
+  padding: 14px 16px;
+}
+.classic-card h4 { margin: 0 0 4px; font-family: "KaiTi", serif; color: var(--ink); }
+.classic-card h4 a { color: var(--link); text-decoration: none; }
+.classic-card h4 a:hover { color: var(--rule); }
+.classic-card .cc-meta { font-size: .76rem; color: var(--muted); }
+.missing-note {
+  margin-top: 26px;
+  padding: 14px 18px;
+  border: 1px dashed var(--border);
+  background: var(--footnote-bg);
+  font-size: .86rem;
+  color: var(--muted);
+}
+.missing-note h3 { font-family: "KaiTi", serif; color: var(--rule); letter-spacing: 2px; margin: 0 0 8px; }
+
+/* ============ 页脚 ============ */
+.site-footer {
+  position: relative;
+  z-index: 1;
+  max-width: 980px;
+  margin: 30px auto 0;
+  padding: 12px 20px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  font-size: .74rem;
+  color: var(--muted);
+  font-family: "KaiTi", "STKaiti", "Kai", serif;
+  letter-spacing: 1px;
+}
+.site-footer a { color: var(--link); text-decoration: none; }
+.site-footer a:hover { color: var(--rule); }
+
+/* ============ 响应式 ============ */
+@media (max-width: 700px) {
+  body { padding: 0 8px 30px; }
+  .page { padding: 20px 16px; }
+  .article-body { font-size: .98rem; }
+  .masthead { padding: 14px 16px; }
+  .entry-list .entry-date { white-space: normal; margin-left: 0; }
+}
