@@ -82,6 +82,13 @@ body::before {
   border: 1px solid var(--border);
   box-shadow: 0 1px 3px var(--shadow);
 }
+/* 标题后的苏俄（РСФСР）国旗 */
+.brand-flag {
+  flex: none;
+  align-self: center;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 3px var(--shadow);
+}
 .brand {
   font-family: "KaiTi", "STKaiti", "Kai", "楷体", "SimSun", serif;
   font-size: 2.1rem;
