@@ -73,6 +73,15 @@ body::before {
   box-shadow: 0 3px 14px var(--shadow);
 }
 .masthead-inner { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+/* 标题栏苏联国旗 */
+.masthead-flag {
+  width: 50px;
+  height: 28px;
+  flex: none;
+  align-self: center;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 3px var(--shadow);
+}
 .brand {
   font-family: "KaiTi", "STKaiti", "Kai", "楷体", "SimSun", serif;
   font-size: 2.1rem;
