@@ -59,6 +59,23 @@
     if (fd) fd.addEventListener('click', function () { applyFont(getFont() - 2); });
     if (fu) fu.addEventListener('click', function () { applyFont(getFont() + 2); });
 
+    /* 浮动标语开关 */
+    function getSloganOn() {
+      return !(LS && LS.getItem('lenin-slogan') === 'off');
+    }
+    function applySlogan(on) {
+      var el = document.getElementById('float-slogan');
+      var btn = document.getElementById('slogan-toggle');
+      if (el) el.hidden = !on;
+      if (btn) btn.classList.toggle('off', !on);
+      if (LS) LS.setItem('lenin-slogan', on ? 'on' : 'off');
+    }
+    var st = document.getElementById('slogan-toggle');
+    if (st) {
+      st.addEventListener('click', function () { applySlogan(!getSloganOn()); });
+    }
+    applySlogan(getSloganOn());
+
     /* 保持按钮图标与当前主题一致 */
     if (btn) {
       var cur = html.getAttribute('data-theme');

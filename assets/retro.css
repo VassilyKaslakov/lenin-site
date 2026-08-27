@@ -511,7 +511,95 @@ sup.fn-ref, .article-body sup { font-size: .72em; }
 .site-footer a { color: var(--link); text-decoration: none; }
 .site-footer a:hover { color: var(--rule); }
 
+/* ============ 1917–1924 苏俄年代装饰 ============ */
+/* 左右两侧固定旧照片条（宽屏显示，窄屏隐藏） */
+.era-frame__panel {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 168px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 0;
+  pointer-events: none;
+}
+.era-frame__panel--left { left: 16px; }
+.era-frame__panel--right { right: 16px; }
+.era-photo {
+  margin: 0;
+  padding: 6px 6px 4px;
+  background: var(--paper-card);
+  border: 1px solid var(--border);
+  outline: 1px solid var(--border);
+  outline-offset: 3px;
+  box-shadow: 0 3px 12px var(--shadow);
+}
+.era-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: sepia(.55) saturate(.65) contrast(.95);
+}
+.era-photo figcaption {
+  margin: 6px 0 2px;
+  font-family: "KaiTi", "STKaiti", "Kai", "楷体", serif;
+  font-size: .64rem;
+  text-align: center;
+  color: var(--muted);
+  letter-spacing: 1px;
+}
+
+/* 锤镰水印（页面中央淡印） */
+.hs-watermark {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 460px;
+  height: 460px;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  opacity: .05;
+  pointer-events: none;
+  object-fit: contain;
+}
+
+/* 浮动标语徽标 */
+.float-slogan {
+  position: fixed;
+  right: 14px;
+  bottom: 16px;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 15px 7px 8px;
+  background: var(--rule);
+  color: #f6e9c8;
+  border: 1px solid var(--border);
+  outline: 1px solid var(--border);
+  outline-offset: 2px;
+  box-shadow: 0 3px 14px var(--shadow);
+  font-family: "KaiTi", "STKaiti", "Kai", "楷体", serif;
+  font-size: .84rem;
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+.float-slogan__hs { width: 24px; height: 24px; flex: none; }
+.float-slogan[hidden] { display: none; }
+
+/* 标语开关按钮的隐藏态 */
+#slogan-toggle.off { opacity: .45; text-decoration: line-through; }
+
 /* ============ 响应式 ============ */
+@media (max-width: 1390px) {
+  .era-frame__panel { display: none; }
+}
+@media (max-width: 700px) {
+  .float-slogan { right: 8px; bottom: 10px; font-size: .72rem; padding: 5px 10px 5px 6px; }
+  .float-slogan__hs { width: 18px; height: 18px; }
+  .hs-watermark { display: none; }
+}
 @media (max-width: 700px) {
   body { padding: 0 8px 30px; }
   .page { padding: 20px 16px; }
