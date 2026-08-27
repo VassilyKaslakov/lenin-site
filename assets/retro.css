@@ -201,6 +201,29 @@ body::before {
   margin: 0;
 }
 .article-head .byline .date { margin-left: 10px; }
+/* 首页肖像照 */
+.portrait {
+  margin: 26px auto 4px;
+  text-align: center;
+}
+.portrait img {
+  max-width: 430px;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  outline: 2px double var(--border);
+  outline-offset: 5px;
+  box-shadow: 0 4px 18px var(--shadow);
+  filter: sepia(.24) contrast(1.03);
+}
+.portrait figcaption {
+  margin-top: 16px;
+  font-family: "KaiTi", "STKaiti", "Kai", "楷体", serif;
+  font-size: .82rem;
+  color: var(--muted);
+  letter-spacing: 1px;
+  line-height: 1.7;
+}
 .rule-hr {
   border: none;
   border-top: 1px solid var(--rule);
