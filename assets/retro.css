@@ -210,6 +210,8 @@ body::before {
   max-width: 430px;
   width: 100%;
   height: auto;
+  display: block;
+  margin-inline: auto;
   border: 1px solid var(--border);
   outline: 2px double var(--border);
   outline-offset: 5px;
