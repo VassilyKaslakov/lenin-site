@@ -226,6 +226,48 @@ body::before {
   letter-spacing: 1px;
   line-height: 1.7;
 }
+/* 纪念列宁 · 苏俄元素横幅 */
+.memorial {
+  margin: 30px auto 4px;
+  max-width: 460px;
+  padding: 20px 24px 18px;
+  text-align: center;
+  border: 2px solid var(--rule);
+  outline: 1px solid var(--rule);
+  outline-offset: 3px;
+  background: var(--paper);
+}
+.memorial__star {
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin: 0 auto 8px;
+  color: var(--rule);
+}
+.memorial__year {
+  margin: 0;
+  font-family: "Times New Roman", Georgia, serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: .35em;
+  text-indent: .35em;
+  color: var(--rule);
+}
+.memorial__name {
+  margin: 6px 0 0;
+  font-family: "Times New Roman", Georgia, "KaiTi", "STKaiti", "楷体", serif;
+  font-size: 1rem;
+  letter-spacing: .18em;
+  color: var(--ink);
+}
+.memorial__note {
+  margin: 10px 0 0;
+  font-family: "KaiTi", "STKaiti", "Kai", "楷体", serif;
+  font-size: .84rem;
+  line-height: 1.8;
+  color: var(--muted);
+  text-align: justify;
+}
 .rule-hr {
   border: none;
   border-top: 1px solid var(--rule);
