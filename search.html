@@ -26,7 +26,11 @@
 <span class="wc" data-wc></span>
 </div>
 </header>
-<div class="page"><div class="article-head"><h1>全文搜索</h1><p class="byline">检索全部 3946 篇 · 本地离线运行</p></div><div class="search-box"><input id="q" type="search" placeholder="输入关键词，如：帝国主义、农民、国家…（可多词空格分隔）" autocomplete="off"></div><div class="search-loading" id="loading">正在载入索引…</div><p class="search-meta" id="meta"></p><div class="search-results" id="results"></div></div><script src="assets/data/search-root.js"></script><script src="assets/data/search-memory-1.js"></script><script src="assets/data/search-memory-2.js"></script><script src="assets/data/search-review.js"></script><script src="assets/data/search-selected.js"></script><script src="assets/search.js"></script>
+<div class="page"><div class="article-head"><h1>全文搜索</h1><p class="byline">检索全部 3946 篇 · 本地离线运行 · 《列宁全集》索引按需加载</p></div><div class="search-box"><input id="q" type="search" placeholder="输入关键词，如：帝国主义、农民、国家…（可多词空格分隔）" autocomplete="off"></div><div class="search-loading" id="loading">正在载入索引…</div><p class="search-meta" id="meta"></p><div class="search-results" id="results"></div></div><script>
+window.SEARCH_SHARDS = ["assets/data/search-root.js", "assets/data/search-memory.js", "assets/data/search-review.js", "assets/data/search-selected.js"];
+window.SEARCH_SHARDS_LAZY = ["assets/data/search-cworks-1.js", "assets/data/search-cworks-2.js", "assets/data/search-cworks-3.js", "assets/data/search-cworks-4.js", "assets/data/search-cworks-5.js", "assets/data/search-cworks-6.js", "assets/data/search-cworks-7.js"];
+window.SEARCH_COUNT = 3946;
+</script><script src="assets/search.js"></script>
 <footer class="site-footer">列宁文库 · 本页内容源自中文马克思主义文库（marxists.org/chinese）列宁专区 · 本地离线存档 · <a href="search.html">全文检索</a></footer>
 <script src="assets/app.js"></script>
 </body>
