@@ -654,3 +654,19 @@ sup.fn-ref, .article-body sup { font-size: .72em; }
   .masthead { padding: 14px 16px; }
   .entry-list .entry-date { white-space: normal; margin-left: 0; }
 }
+
+/* 返回主站链接 */
+.goto-gpa {
+  font-family: "KaiTi", "STKaiti", "Kai", "楷体", serif;
+  font-size: .78rem;
+  letter-spacing: 1px;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--border);
+  white-space: nowrap;
+}
+.goto-gpa:hover { color: var(--rule); border-bottom-style: solid; }
+.site-footer .goto-gpa { font-size: inherit; }
+@media (max-width: 700px) {
+  .masthead-inner .goto-gpa { display: none; }
+}
