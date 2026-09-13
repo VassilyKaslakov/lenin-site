@@ -670,3 +670,204 @@ sup.fn-ref, .article-body sup { font-size: .72em; }
 @media (max-width: 700px) {
   .masthead-inner .goto-gpa { display: none; }
 }
+
+/* ============================================================
+   长页目录抽屉（由 app.js 在长文页注入）
+   ============================================================ */
+.toc-drawer {
+  position: fixed;
+  z-index: 60;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(640px, calc(100vw - 32px));
+  max-height: min(78vh, 760px);
+  display: flex;
+  flex-direction: column;
+  background: var(--paper-card);
+  border: 1px solid var(--border);
+  outline: 2px double var(--border);
+  outline-offset: 4px;
+  box-shadow: 0 10px 40px var(--shadow);
+}
+.toc-drawer[hidden] { display: none; }
+.toc-drawer__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.toc-drawer__title {
+  margin: 0;
+  font-family: "KaiTi", "STKaiti", "Kai", "楷体", serif;
+  font-size: 1.05rem;
+  letter-spacing: 4px;
+  color: var(--rule);
+}
+.toc-drawer__close {
+  margin-left: auto;
+  min-width: 44px;
+  min-height: 32px;
+  font-family: inherit;
+  font-size: .9rem;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  cursor: pointer;
+}
+.toc-drawer__close:hover { border-color: var(--rule); color: var(--rule); }
+.toc-drawer__list {
+  flex: 1;
+  list-style: none;
+  margin: 0;
+  padding: 6px 6px 12px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.toc-drawer__list a {
+  display: block;
+  padding: 9px 12px;
+  font-size: .95rem;
+  line-height: 1.6;
+  color: var(--link);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--border);
+}
+.toc-drawer__list a:hover { color: var(--rule); }
+.toc-drawer__list li.is-current > a { color: var(--rule); background: var(--footnote-bg); }
+
+.toc-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: rgba(30, 20, 5, .45);
+}
+.toc-backdrop[hidden] { display: none; }
+
+/* 抽屉打开时锁住背景滚动 */
+body.toc-open { overflow: hidden; }
+
+/* 锚点跳转时给固定工具条留出余量 */
+.article-body h2[id], .article-body h3[id], .article-body h4[id] { scroll-margin-top: 14px; }
+
+/* 返回顶部（仅手机出现，见下方媒体查询；JS 滚动后加 .is-on） */
+#back-top {
+  position: fixed;
+  right: 14px;
+  bottom: calc(66px + env(safe-area-inset-bottom));
+  z-index: 40;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  font-size: 1.1rem;
+  background: var(--paper-card);
+  color: var(--ink);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  box-shadow: 0 3px 14px var(--shadow);
+  cursor: pointer;
+}
+#back-top.is-on { display: flex; }
+@media (min-width: 701px) { #back-top { display: none !important; } }
+
+/* ============================================================
+   移动端适配层（2026-09-13 追加）
+   只覆盖，不改写上方任何原规则；字号一律 rem，跟随 A+/A− 根字号
+   ============================================================ */
+
+/* ---------- ≤1024px：解除固定栏宽，版面跟随屏幕 ---------- */
+@media (max-width: 1024px) {
+  .masthead, .page, .site-footer { max-width: none; }
+  .article, .search-results, .search-box { max-width: none; }
+}
+
+/* ---------- ≤700px：手机 ---------- */
+@media (max-width: 700px) {
+  /* 页面留出吸底工具条的高度 */
+  body { padding: 0 12px calc(58px + env(safe-area-inset-bottom)); }
+
+  /* 版面收边（原 padding 8px 会让四角装饰描边贴到屏幕外） */
+  .page { padding: 20px 16px 24px; outline-width: 2px; outline-offset: 3px; }
+  /* 抬高刊头层级：吸底工具条是它的子元素，不抬高会被 .page 的同级 z-index:1 盖住 */
+  .masthead { padding: 14px 16px 12px; z-index: 50; }
+
+  /* 装饰全部收起：标语徽标 / 锤镰水印 / 名言卡 / 侧栏画廊 */
+  .era-frame, .era-frame__panel, .hs-watermark,
+  .float-slogan, .float-quote { display: none !important; }
+  #slogan-toggle, #images-toggle { display: none; }  /* 装饰已隐藏，开关无意义 */
+  body::before { display: none; }                    /* 纸张噪点：手机省渲染 */
+
+  /* 正文可读性 */
+  .article-body { font-size: 1.08rem; line-height: 1.9; overflow-wrap: break-word; }
+  .article-body p, .article-body div { margin: 0.8em 0; }
+  .article-body img { max-width: 100%; height: auto; }
+  .article-head h1 { font-size: 1.5rem; letter-spacing: 0; }
+  .breadcrumb { overflow-wrap: break-word; }
+
+  /* 表格横向滚动（原站布局表/数据表，列宁站 3192 个页面含表） */
+  .article-body table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .article-body td, .article-body th { padding: 2px 8px; }
+
+  /* 导航可横滑，不换行挤压 */
+  .topnav { flex-wrap: nowrap; overflow-x: auto; gap: 0 20px; scrollbar-width: none; }
+  .topnav::-webkit-scrollbar { display: none; }
+
+  /* 统计页条形图：标签列收窄，给条形留出宽度 */
+  .bar-row { gap: 8px; }
+  .bar-label { width: 86px; font-size: .78rem; }
+  .bar-num { width: 46px; font-size: .74rem; }
+
+  /* 分类卡：点标题折叠（app.js 切换 .collapsed） */
+  .catalog-card h3 { cursor: pointer; display: flex; align-items: center; gap: 8px; }
+  .catalog-card h3::after { content: "▾"; margin-left: auto; color: var(--muted); font-size: .8em; }
+  .catalog-card.collapsed h3::after { content: "▸"; }
+  .catalog-card.collapsed > *:not(h3) { display: none; }
+  .catalog-card .count { float: none; }
+
+  /* 阅读工具条吸底：拇指可达，按钮 ≥44×36 */
+  .reader-controls {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    margin: 0;
+    padding: 6px 10px calc(6px + env(safe-area-inset-bottom));
+    gap: 8px;
+    background: var(--paper-card);
+    border-top: 1px solid var(--border);
+    box-shadow: 0 -3px 14px var(--shadow);
+  }
+  .reader-controls button { min-width: 44px; min-height: 36px; font-size: 1rem; padding: 2px 8px; }
+  .reader-controls .wc { display: none; }   /* 窄屏放不下 */
+
+  /* 目录抽屉占满窄屏 */
+  .toc-drawer {
+    left: 0; right: 0; top: 0; bottom: 0;
+    width: auto; max-width: none; max-height: none;
+    transform: none;
+    border: none; outline: none;
+  }
+}
+
+/* ---------- ≤480px：小屏进一步压缩 ---------- */
+@media (max-width: 480px) {
+  .brand { font-size: 1.7rem; letter-spacing: 4px; }
+  .masthead-sub, .masthead-years { display: none; }
+  .article-head h1 { font-size: 1.32rem; }
+  .page { padding: 18px 13px 22px; }
+  .topnav a { font-size: .92rem; letter-spacing: 1px; }
+}
+
+/* ---------- 触屏：去掉只在 hover 成立的反馈，补 :active ---------- */
+@media (hover: none) {
+  .topnav a:hover, .entry-list .entry-title:hover, .catalog-card a:hover,
+  .article-body a:hover, .site-footer a:hover, .goto-gpa:hover { text-decoration: none; }
+  .reader-controls button:hover { border-color: var(--border); color: var(--ink); }
+  .topnav a:active, .entry-list .entry-title:active, .catalog-card a:active { color: var(--rule); }
+  .reader-controls button:active { border-color: var(--rule); color: var(--rule); }
+}

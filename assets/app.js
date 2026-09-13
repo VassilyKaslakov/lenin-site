@@ -40,6 +40,156 @@
     out.textContent = '本页约 ' + n.toLocaleString('en-US') + ' 字 · 约 ' + m + ' 分钟';
   }
 
+  /* ================= 移动端增强 ================= */
+
+  /* 长页目录抽屉：正文带 id 的标题 ≥30 个时才在工具条注入「目」按钮 */
+  function initToc() {
+    var body = document.querySelector('.article-body');
+    var bar = document.querySelector('.reader-controls');
+    if (!body || !bar) return;
+    var hs = body.querySelectorAll('h2[id], h3[id], h4[id]');
+    if (hs.length < 30) return;
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'toc-toggle';
+    btn.title = '目录';
+    btn.textContent = '目';
+    var wc = bar.querySelector('.wc');
+    if (wc) bar.insertBefore(btn, wc); else bar.appendChild(btn);
+
+    var backdrop = document.createElement('div');
+    backdrop.className = 'toc-backdrop';
+    backdrop.hidden = true;
+
+    var drawer = document.createElement('div');
+    drawer.className = 'toc-drawer';
+    drawer.hidden = true;
+
+    var head = document.createElement('div');
+    head.className = 'toc-drawer__head';
+    var title = document.createElement('p');
+    title.className = 'toc-drawer__title';
+    title.textContent = '目　录';
+    var closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.className = 'toc-drawer__close';
+    closeBtn.textContent = '关　闭';
+    head.appendChild(title);
+    head.appendChild(closeBtn);
+
+    var list = document.createElement('ol');
+    list.className = 'toc-drawer__list';
+    var items = [];
+    for (var i = 0; i < hs.length; i++) {
+      var li = document.createElement('li');
+      var a = document.createElement('a');
+      a.href = '#' + hs[i].id;
+      a.textContent = (hs[i].textContent || '').replace(/\s+/g, ' ').trim();
+      li.appendChild(a);
+      list.appendChild(li);
+      items.push({ el: hs[i], li: li });
+    }
+    drawer.appendChild(head);
+    drawer.appendChild(list);
+    document.body.appendChild(backdrop);
+    document.body.appendChild(drawer);
+
+    var offsets = null;
+    var current = -1;
+
+    function measure() {
+      offsets = [];
+      for (var i = 0; i < items.length; i++) offsets.push(items[i].el.offsetTop);
+    }
+
+    /* 二分找出当前所在篇目，高亮之 */
+    function markCurrent(y) {
+      if (!offsets) measure();
+      var lo = 0, hi = offsets.length - 1, idx = -1, probe = y + 140;
+      while (lo <= hi) {
+        var mid = (lo + hi) >> 1;
+        if (offsets[mid] <= probe) { idx = mid; lo = mid + 1; } else { hi = mid - 1; }
+      }
+      if (idx === current) return;
+      if (current >= 0) items[current].li.classList.remove('is-current');
+      if (idx >= 0) items[idx].li.classList.add('is-current');
+      current = idx;
+    }
+
+    function open() {
+      if (!offsets) measure();
+      drawer.hidden = false;
+      backdrop.hidden = false;
+      document.body.classList.add('toc-open');
+      markCurrent(window.pageYOffset || 0);
+      if (current >= 0) {
+        var li = items[current].li;
+        var top = li.offsetTop - list.offsetTop;      /* 换算到列表内坐标 */
+        if (top < list.scrollTop || top + li.offsetHeight > list.scrollTop + list.clientHeight) {
+          list.scrollTop = Math.max(0, top - list.clientHeight / 2);
+        }
+      }
+    }
+    function close() {
+      drawer.hidden = true;
+      backdrop.hidden = true;
+      document.body.classList.remove('toc-open');
+    }
+
+    btn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', close);
+    document.addEventListener('keydown', function (e) {
+      if (!drawer.hidden && (e.key === 'Escape' || e.keyCode === 27)) close();
+    });
+    /* 点篇目：先解锁背景滚动，再让浏览器走默认的锚点跳转 */
+    list.addEventListener('click', function (e) {
+      var a = e.target;
+      while (a && a !== list && a.tagName !== 'A') a = a.parentNode;
+      if (a && a !== list) close();
+    });
+    window.addEventListener('resize', function () { offsets = null; });
+  }
+
+  /* 返回顶部：滚动 600px 后出现（CSS 只在手机显示） */
+  function initBackTop() {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.id = 'back-top';
+    btn.title = '返回顶部';
+    btn.textContent = '↑';
+    btn.addEventListener('click', function () { window.scrollTo(0, 0); });
+    document.body.appendChild(btn);
+
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(function () {
+        ticking = false;
+        var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+        btn.classList.toggle('is-on', y > 600);
+      });
+    }, { passive: true });
+  }
+
+  /* 分类卡折叠：手机上限 700px 生效，点标题收起/展开（默认全展开） */
+  function initCatalogFold() {
+    var grid = document.querySelector('.catalog-grid');
+    if (!grid) return;
+    var mq = window.matchMedia ? window.matchMedia('(max-width: 700px)') : null;
+    grid.addEventListener('click', function (e) {
+      if (mq && !mq.matches) return;
+      var t = e.target;
+      if (t && t.tagName === 'A') return;
+      var h = t;
+      while (h && h !== grid && h.tagName !== 'H3') h = h.parentNode;
+      if (!h || h === grid) return;
+      h.parentNode.classList.toggle('collapsed');
+    });
+  }
+
   function init() {
     applyTheme(getTheme());
     applyFont(getFont());
@@ -137,6 +287,11 @@
       btn.title = cur === 'dark' ? '切换到浅色' : '切换到深色';
     }
     wordCount();
+
+    /* 移动端增强 */
+    initToc();
+    initBackTop();
+    initCatalogFold();
   }
 
   if (document.readyState === 'loading') {
